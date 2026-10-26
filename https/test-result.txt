@@ -1,0 +1,2 @@
+Code HTTP : 200
+Résultat de vérification TLS : 0

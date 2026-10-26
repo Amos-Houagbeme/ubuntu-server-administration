@@ -1,0 +1,11 @@
+# configuration file /etc/nginx/nginx.conf:
+# configuration file /etc/nginx/mime.types:
+# configuration file /etc/nginx/sites-enabled/default:
+	listen 80 default_server;
+	listen [::]:80 default_server;
+	server_name _;
+	return 301 https://192.168.50.10$request_uri;
+# configuration file /etc/nginx/sites-enabled/lab-site-https:
+    listen 443 ssl;
+    listen [::]:443 ssl;
+    server_name 192.168.50.10;

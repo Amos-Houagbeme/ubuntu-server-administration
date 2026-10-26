@@ -1,0 +1,87 @@
+==================================================================
+Test de restauration dans un répertoire isolé
+==================================================================
+Date    : 26/10/2026 16:42:02 UTC
+Serveur : srv-web-01
+Archive : /var/backups/lab-linux/srv-web-01_26-10-2026__16-41-46.tar.gz
+Taille  : 11170 octets, modifiée le 2026-10-26 16:41:46
+
+Répertoire de test : /var/tmp/restore-test (supprimé à la fin du test)
+
+--- 1. Contenu de l'archive ---
+$ tar -tzf /var/backups/lab-linux/srv-web-01_26-10-2026__16-41-46.tar.gz
+var/www/lab-site/public/
+var/www/lab-site/public/index.html
+etc/nginx/sites-available/default
+etc/nginx/sites-available/lab-site-https
+etc/nginx/sites-enabled/default
+etc/nginx/sites-enabled/lab-site-https
+etc/netplan/01-lab-linux.yaml
+etc/ssh/sshd_config
+etc/ssh/sshd_config.d/00-security.conf
+home/dokja/.ssh/authorized_keys
+etc/ufw/
+etc/ufw/after6.rules
+etc/ufw/before.rules
+etc/ufw/after.rules
+etc/ufw/ufw.conf
+etc/ufw/before6.rules
+etc/ufw/applications.d/
+etc/ufw/applications.d/nginx
+etc/ufw/applications.d/openssh-server
+etc/ufw/user.rules
+etc/ufw/sysctl.conf
+etc/ufw/before.init
+etc/ufw/after.init
+etc/ufw/user6.rules
+etc/default/ufw
+etc/ssl/certs/lab-site.crt
+home/dokja/scripts/backup.sh
+
+--- 2. Extraction ---
+$ tar -xzpf /var/backups/lab-linux/srv-web-01_26-10-2026__16-41-46.tar.gz -C /var/tmp/restore-test
+Extraction terminée.
+
+--- 3. Fichier témoin : /var/www/lab-site/public/index.html ---
+$ stat -c '%n  %s octets  droits=%a  %U:%G' <restauré> <actif>
+/var/tmp/restore-test/var/www/lab-site/public/index.html  663 octets  droits=644  root:root
+/var/www/lab-site/public/index.html  663 octets  droits=644  root:root
+$ diff -u /var/tmp/restore-test/var/www/lab-site/public/index.html /var/www/lab-site/public/index.html
+(aucune différence)
+
+--- 4. Comparaison de tous les fichiers de l'archive avec le système actif ---
+(contenu, droits, propriétaire:groupe ; pour un lien symbolique, sa cible)
+  [OK]         644 root:root  var/www/lab-site/public/index.html
+  [OK]         644 root:root  etc/nginx/sites-available/default
+  [OK]         644 root:root  etc/nginx/sites-available/lab-site-https
+  [OK]         lien      etc/nginx/sites-enabled/default -> /etc/nginx/sites-available/default
+  [OK]         lien      etc/nginx/sites-enabled/lab-site-https -> /etc/nginx/sites-available/lab-site-https
+  [OK]         600 root:root  etc/netplan/01-lab-linux.yaml
+  [OK]         644 root:root  etc/ssh/sshd_config
+  [OK]         644 root:root  etc/ssh/sshd_config.d/00-security.conf
+  [OK]         600 dokja:dokja  home/dokja/.ssh/authorized_keys
+  [OK]         640 root:root  etc/ufw/after6.rules
+  [OK]         640 root:root  etc/ufw/before.rules
+  [OK]         640 root:root  etc/ufw/after.rules
+  [OK]         644 root:root  etc/ufw/ufw.conf
+  [OK]         640 root:root  etc/ufw/before6.rules
+  [OK]         644 root:root  etc/ufw/applications.d/nginx
+  [OK]         644 root:root  etc/ufw/applications.d/openssh-server
+  [OK]         640 root:root  etc/ufw/user.rules
+  [OK]         644 root:root  etc/ufw/sysctl.conf
+  [OK]         640 root:root  etc/ufw/before.init
+  [OK]         640 root:root  etc/ufw/after.init
+  [OK]         640 root:root  etc/ufw/user6.rules
+  [OK]         644 root:root  etc/default/ufw
+  [OK]         644 root:root  etc/ssl/certs/lab-site.crt
+  [OK]         750 dokja:dokja  home/dokja/scripts/backup.sh
+
+Fichiers comparés  : 24
+Identiques         : 24
+Différents/absents : 0
+
+Portée : ce test couvre les fichiers sauvegardés (contenu, droits, propriétaires).
+Il ne prouve pas la restauration complète du serveur : la clé privée TLS, par
+exemple, n'est volontairement pas dans l'archive.
+
+RÉSULTAT : SUCCÈS

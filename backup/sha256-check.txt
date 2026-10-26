@@ -1,0 +1,13 @@
+==================================================================
+Contrôle d'intégrité SHA-256 de l'archive
+==================================================================
+Date    : 26/10/2026 16:42:02 UTC
+Serveur : srv-web-01
+Archive : /var/backups/lab-linux/srv-web-01_26-10-2026__16-41-46.tar.gz
+Taille  : 11170 octets, modifiée le 2026-10-26 16:41:46
+
+$ sha256sum -c /var/backups/lab-linux/srv-web-01_26-10-2026__16-41-46.tar.gz.sha256
+/var/backups/lab-linux/srv-web-01_26-10-2026__16-41-46.tar.gz: OK
+Code retour : 0
+
+RÉSULTAT : SUCCÈS

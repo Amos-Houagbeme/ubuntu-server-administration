@@ -1,0 +1,10 @@
+total 68K
+-rw------- 1 root root 1,4K oct.  22 02:00 backup.log
+-rw------- 1 root root  11K oct.  21 08:47 srv-web-01_21-10-2026__08-47-24.tar.gz
+-rw------- 1 root root  128 oct.  21 08:47 srv-web-01_21-10-2026__08-47-24.tar.gz.sha256
+-rw------- 1 root root  11K oct.  21 22:43 srv-web-01_21-10-2026__22-43-35.tar.gz
+-rw------- 1 root root  128 oct.  21 22:43 srv-web-01_21-10-2026__22-43-35.tar.gz.sha256
+-rw------- 1 root root  11K oct.  21 23:46 srv-web-01_21-10-2026__23-46-06.tar.gz
+-rw------- 1 root root  128 oct.  21 23:46 srv-web-01_21-10-2026__23-46-06.tar.gz.sha256
+-rw------- 1 root root  11K oct.  22 02:00 srv-web-01_22-10-2026__02-00-01.tar.gz
+-rw------- 1 root root  128 oct.  22 02:00 srv-web-01_22-10-2026__02-00-01.tar.gz.sha256

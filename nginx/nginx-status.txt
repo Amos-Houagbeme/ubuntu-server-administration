@@ -1,0 +1,24 @@
+● nginx.service - A high performance web server and a reverse proxy server
+     Loaded: loaded (/usr/lib/systemd/system/nginx.service; enabled; preset: enabled)
+     Active: active (running) since Tue 2026-10-20 06:50:05 UTC; 6h ago
+       Docs: man:nginx(8)
+    Process: 2755 ExecStartPre=/usr/sbin/nginx -t -q -g daemon on; master_process on; (code=exited, status=0/SUCCESS)
+    Process: 2757 ExecStart=/usr/sbin/nginx -g daemon on; master_process on; (code=exited, status=0/SUCCESS)
+    Process: 4026 ExecReload=/usr/sbin/nginx -g daemon on; master_process on; -s reload (code=exited, status=0/SUCCESS)
+   Main PID: 2786 (nginx)
+      Tasks: 3 (limit: 4600)
+     Memory: 3.4M (peak: 5.3M)
+        CPU: 117ms
+     CGroup: /system.slice/nginx.service
+             ├─2786 "nginx: master process /usr/sbin/nginx -g daemon on; master_process on;"
+             ├─4028 "nginx: worker process"
+             └─4029 "nginx: worker process"
+
+oct. 20 06:50:05 srv-web-01 systemd[1]: Starting nginx.service - A high performance web server and a reverse proxy server...
+oct. 20 06:50:05 srv-web-01 systemd[1]: Started nginx.service - A high performance web server and a reverse proxy server.
+oct. 20 07:57:01 srv-web-01 systemd[1]: Reloading nginx.service - A high performance web server and a reverse proxy server...
+oct. 20 07:57:01 srv-web-01 nginx[3206]: 2026/10/20 07:57:01 [notice] 3206#3206: signal process started
+oct. 20 07:57:01 srv-web-01 systemd[1]: Reloaded nginx.service - A high performance web server and a reverse proxy server.
+oct. 20 09:45:52 srv-web-01 systemd[1]: Reloading nginx.service - A high performance web server and a reverse proxy server...
+oct. 20 09:45:52 srv-web-01 nginx[4026]: 2026/10/20 09:45:52 [notice] 4026#4026: signal process started
+oct. 20 09:45:52 srv-web-01 systemd[1]: Reloaded nginx.service - A high performance web server and a reverse proxy server.
