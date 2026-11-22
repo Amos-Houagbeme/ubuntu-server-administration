@@ -1,0 +1,32 @@
+Mesure de départ avant durcissement : scan TCP du réseau du laboratoire
+Date : 20/11/2026 09:14 WAT, depuis l'hôte (stone@HP)
+État : UFW actif sur srv-web-01, inactif sur srv-log-01
+
+$ nmap -F -T4 192.168.50.0/24
+Starting Nmap 7.95 ( https://nmap.org ) at 2026-11-20 09:14 WAT
+Nmap scan report for 192.168.50.1
+Host is up (0.00029s latency).
+Not shown: 99 closed tcp ports (conn-refused)
+PORT   STATE SERVICE
+53/tcp open  domain
+
+Nmap scan report for 192.168.50.10
+Host is up (0.00049s latency).
+Not shown: 97 filtered tcp ports (no-response)
+PORT    STATE SERVICE
+22/tcp  open  ssh
+80/tcp  open  http
+443/tcp open  https
+
+Nmap scan report for 192.168.50.20
+Host is up (0.00034s latency).
+Not shown: 99 closed tcp ports (conn-refused)
+PORT   STATE SERVICE
+22/tcp open  ssh
+
+Nmap done: 256 IP addresses (3 hosts up) scanned in 4.48 seconds
+
+Lecture :
+- srv-web-01 : 97 ports « filtered » (UFW ignore les paquets), seuls 22, 80 et 443 sont visibles.
+- srv-log-01 : 99 ports « closed » (la machine répond « fermé » à chaque sonde) : aucun filtrage.
+- Le scan est limité à 100 ports TCP (-F) : l'UDP/514 de srv-log-01 n'est pas couvert.

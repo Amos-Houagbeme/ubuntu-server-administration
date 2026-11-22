@@ -109,6 +109,7 @@ Le fichier témoin de la restauration est `index.html` : son contenu, ses droits
 - Le test de restauration couvre les fichiers sauvegardés ; il ne prouve pas la restauration complète des services.
 - La clé privée TLS n'est pas sauvegardée : sa procédure de récupération reste à définir.
 - Aucune notification n'est envoyée en cas d'échec, et l'espace disque n'est pas surveillé.
+- **Machines éteintes** : Cron n'exécute la sauvegarde qu'à 02:00 UTC et uniquement si la machine virtuelle est allumée. Une exécution automatique a été observée (22/10/2026 à 02:00:01, voir [`backup-log.txt`](../backup/backup-log.txt)), mais le laboratoire n'est pas allumé en permanence : une nuit sans machine allumée ne produit aucune sauvegarde, et Cron ne rattrape pas l'exécution manquée. Cron est conservé ; `anacron` ou un minuteur systemd persistant (`Persistent=true`) rattraperaient l'exécution au démarrage suivant.
 
 ## 11. Conclusion
 

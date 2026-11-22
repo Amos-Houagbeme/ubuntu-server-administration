@@ -10,8 +10,9 @@
 
 | Élément | Valeur |
 |---|---|
-| Machine hôte | Ubuntu, utilisateur `stone` |
+| Machine hôte | Debian 13 depuis novembre 2026 (Ubuntu auparavant), utilisateur `stone` |
 | Serveur web | `srv-web-01` |
+| Serveur de journaux | `srv-log-01` (192.168.50.20), utilisateur `kim` |
 | Utilisateur distant | `dokja` |
 | Adresse IPv4 du serveur | `192.168.50.10/24` |
 | Interface du serveur | `enp1s0` |
@@ -915,7 +916,8 @@ Un élément n'est coché que lorsqu'une preuve est liée. Les éléments restan
 
 - [x] Valider et documenter la redirection HTTP vers HTTPS : [`http-redirect.txt`](../nginx/http-redirect.txt).
 - [ ] Compléter les captures pertinentes, notamment celles du réseau virtuel.
-- [ ] Configurer et tester la collecte centralisée des journaux avec `rsyslog` sur `srv-log-01`.
+- [x] Configurer et tester la collecte centralisée des journaux avec `rsyslog` sur `srv-log-01` : [`reception-test.txt`](../journaux/reception-test.txt).
+- [x] Créer les groupes, le répertoire partagé et les ACL, et vérifier la matrice d'accès : [`test-matrice-acl.md`](../permissions/test-matrice-acl.md).
 - [ ] Mettre en place et tester le transfert de sauvegardes via SSH/rsync.
 - [ ] Pratiquer et documenter LVM, `logrotate` et `chrony`.
 - [ ] Simuler des incidents, consigner les symptômes, le diagnostic, la correction et les vérifications après correction.
@@ -928,3 +930,57 @@ Pour chaque nouvelle tâche :
 3. enregistrer une preuve utile dans `~/lab-evidence/` ;
 4. mettre à jour la section correspondante de ce document ;
 5. distinguer les étapes réalisées, les modèles de configuration et les travaux encore prévus.
+
+## 14. Utilisateurs, groupes, permissions et ACL
+
+Modèles d'après [09](09-utilisateurs-permissions.md). Les preuves sont dans `permissions/`.
+
+```bash
+# [SERVEUR] srv-web-01 : groupes et comptes de test (sans mot de passe utilisable)
+sudo groupadd webadmins
+sudo groupadd logadmins
+sudo useradd -m -s /bin/bash -G webadmins webuser
+sudo useradd -m -s /bin/bash loguser
+sudo usermod -aG logadmins loguser      # -a est indispensable : sans lui, les autres groupes secondaires sont remplacés
+sudo useradd -m -s /bin/bash globaluser
+id webuser loguser globaluser
+getent group webadmins logadmins
+
+# [SERVEUR] répertoire partagé : root:webadmins, setgid, aucun droit pour les autres
+sudo mkdir /srv/web-partage
+sudo chown :webadmins /srv/web-partage
+sudo chmod 2770 /srv/web-partage
+ls -ld /srv/web-partage                 # attendu : drwxrws---
+
+# [SERVEUR] ACL du répertoire et ACL par défaut (héritées par les nouveaux fichiers)
+sudo setfacl -m g:webadmins:rwx,g:logadmins:rx /srv/web-partage
+sudo setfacl -d -m g:webadmins:rwx,g:logadmins:rx /srv/web-partage
+sudo getfacl /srv/web-partage
+```
+
+Tester avec les droits d'un compte, avec des chemins complets :
+
+```bash
+# [SERVEUR] la redirection est ouverte par le shell : sudo -u doit s'appliquer à la commande qui ouvre le fichier
+echo "texte" | sudo -u webuser tee -a /srv/web-partage/fichier
+sudo -u loguser cat /srv/web-partage/fichier
+sudo -u globaluser ls /srv/web-partage          # refus attendu
+
+# [SERVEUR] matrice complète, explications à l'écran
+sudo bash scripts/test-acl.sh
+```
+
+## 15. Journaux centralisés : tests
+
+```bash
+# [SERVEUR] srv-web-01 : règle d'émission et message de test
+grep -rEs '^[^#]*@@?[0-9a-zA-Z]' /etc/rsyslog.conf /etc/rsyslog.d/
+logger -t healthcheck "test-$(date +%Y%m%d%H%M%S)"
+
+# [SERVEUR] srv-log-01 : écoute et réception
+sudo ss -ulnp | grep 514
+sudo grep -r "test-" /var/log/remote | tail -3
+
+# [SERVEUR] chaque machine : contrôle de santé complet
+sudo bash scripts/health-check.sh
+```

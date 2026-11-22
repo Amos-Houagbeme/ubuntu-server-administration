@@ -1,0 +1,16 @@
+[srv-web-01] Comptes et groupes de l'exercice, état final relevé le 22/11/2026
+
+$ getent group webadmins logadmins
+webadmins:x:1001:webuser
+logadmins:x:1002:loguser
+
+$ id webuser loguser globaluser
+uid=1004(webuser) gid=1006(webuser) groups=1006(webuser),1001(webadmins)
+uid=1002(loguser) gid=1004(loguser) groups=1004(loguser),1002(logadmins)
+uid=1003(globaluser) gid=1005(globaluser) groups=1005(globaluser)
+
+Lecture :
+- webuser est membre de webadmins, loguser de logadmins, globaluser d'aucun des deux (témoin « autres »).
+- Les trois comptes n'ont pas de mot de passe utilisable : ils servent aux tests avec « sudo -u », jamais à une connexion.
+- Le compte d'administration dokja n'appartient à aucun des deux groupes : il passe par sudo et ne sert pas à tester les droits.
+- webuser a été recréé (UID 1004) après une tentative de renommage incomplète : usermod -l ne renomme ni le groupe principal ni le répertoire personnel.

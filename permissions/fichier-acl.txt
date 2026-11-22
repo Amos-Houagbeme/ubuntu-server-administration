@@ -1,0 +1,37 @@
+[srv-web-01] ACL héritées par un fichier et un sous-dossier créés par webuser, relevées le 22/11/2026
+
+$ sudo -u webuser touch /srv/web-partage/fichier3
+$ sudo getfacl /srv/web-partage/fichier3
+# file: srv/web-partage/fichier3
+# owner: webuser
+# group: webadmins
+user::rw-
+group::rwx			#effective:rw-
+group:webadmins:rwx		#effective:rw-
+group:logadmins:r-x		#effective:r--
+mask::rw-
+other::---
+
+$ sudo -u webuser mkdir /srv/web-partage/rep_test
+$ sudo getfacl /srv/web-partage/rep_test
+# file: srv/web-partage/rep_test
+# owner: webuser
+# group: webadmins
+# flags: -s-
+user::rwx
+group::rwx
+group:webadmins:rwx
+group:logadmins:r-x
+mask::rwx
+other::---
+default:user::rwx
+default:group::rwx
+default:group:webadmins:rwx
+default:group:logadmins:r-x
+default:mask::rwx
+default:other::---
+
+Lecture :
+- Le fichier hérite du groupe webadmins (setgid) et des ACL par défaut, sans dépendre de l'umask de son créateur.
+- Le masque (mask::rw-) plafonne les droits : le « x » de logadmins n'est pas effectif sur un fichier (#effective:r--), alors qu'il l'est sur un dossier (r-x) pour y entrer.
+- Le sous-dossier hérite aussi du setgid et des ACL par défaut : l'héritage se poursuit aux niveaux suivants.

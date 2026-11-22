@@ -1,0 +1,27 @@
+[srv-web-01] Répertoire partagé /srv/web-partage, état final relevé le 22/11/2026 à 12:10 UTC
+
+$ ls -ld /srv/web-partage
+drwxrws---+ 4 root webadmins 4096 nov.  22 12:10 /srv/web-partage
+
+$ getfacl -p /srv/web-partage
+# file: /srv/web-partage
+# owner: root
+# group: webadmins
+# flags: -s-
+user::rwx
+group::rwx
+group:webadmins:rwx
+group:logadmins:r-x
+mask::rwx
+other::---
+default:user::rwx
+default:group::rwx
+default:group:webadmins:rwx
+default:group:logadmins:r-x
+default:mask::rwx
+default:other::---
+
+Lecture :
+- Propriétaire root, groupe webadmins, mode 2770 (le « s » du groupe est le bit setgid ; le « + » signale une ACL).
+- Droits explicites : webadmins en rwx, logadmins en r-x, autres sans aucun droit.
+- Les lignes « default: » sont les ACL par défaut : elles s'appliquent aux fichiers et sous-dossiers créés après coup.

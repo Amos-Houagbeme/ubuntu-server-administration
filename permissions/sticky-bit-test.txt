@@ -1,0 +1,16 @@
+[srv-web-01] Test du sticky bit sur le répertoire partagé, 22/11/2026
+
+$ sudo touch /srv/web-partage/fichier1          (fichier appartenant à root)
+$ sudo chmod +t /srv/web-partage/
+$ ls -l /srv/
+drwxrws--T+ 3 root webadmins 4096 nov.  22 12:11 web-partage
+
+$ sudo -u webuser rm /srv/web-partage/fichier1
+rm: cannot remove '/srv/web-partage/fichier1': Operation not permitted
+
+Lecture :
+- Avec le sticky bit (« T » ici, car « autres » n'a pas le droit x), webuser ne peut plus supprimer le fichier d'un autre propriétaire, bien qu'il ait w+x sur le dossier.
+- Le message est « Operation not permitted » et non « Permission denied » : le refus vient du sticky bit, pas des ACL.
+- Sans sticky bit, la même suppression réussissait (matrice : permissions/test-matrice-acl.md).
+- Décision : sticky bit testé, non retenu (voir docs/09-utilisateurs-permissions.md, section 7).
+- Un chmod +t posé sur un fichier au lieu du dossier s'affiche (« T ») mais n'a aucun effet.

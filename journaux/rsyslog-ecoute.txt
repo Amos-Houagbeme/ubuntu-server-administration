@@ -1,0 +1,18 @@
+[srv-log-01] Écoute et arborescence de réception, relevées le 20/11/2026 à 07:53 UTC
+
+$ ss -tulnp   (lignes concernant rsyslogd)
+udp   UNCONN 0      0            0.0.0.0:514       0.0.0.0:*    users:(("rsyslogd",pid=653,fd=5))
+udp   UNCONN 0      0               [::]:514          [::]:*    users:(("rsyslogd",pid=653,fd=6))
+
+$ ls -lR /var/log/remote
+/var/log/remote:
+total 152
+drwxr-x--- 2 syslog adm   4096 oct.  25 19:17 srv-web-01
+-rw-r--r-- 1 syslog adm 150521 oct.  25 19:15 srv-web-01.log
+
+/var/log/remote/srv-web-01:
+total 220
+-rw-r--r-- 1 syslog syslog   9035 nov.  20 07:48 ssh.log
+-rw-r--r-- 1 syslog syslog 205998 nov.  20 07:53 system.log
+
+Remarque : srv-web-01.log (25/10/2026, lisible par tous) est un reste d'un essai antérieur, hors du rangement par sous-dossier.

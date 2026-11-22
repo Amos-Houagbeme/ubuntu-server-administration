@@ -1,0 +1,6 @@
+[srv-web-01] Règle d'émission relevée le 20/11/2026
+
+$ grep -rEs '^[^#]*@@?[0-9a-zA-Z]' /etc/rsyslog.conf /etc/rsyslog.d/
+/etc/rsyslog.d/60-remote.conf:*.* @192.168.50.20:514
+
+Lecture : *.* sélectionne tous les messages ; le @ simple désigne le transport UDP (@@ désignerait TCP).

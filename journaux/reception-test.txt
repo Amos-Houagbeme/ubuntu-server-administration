@@ -1,0 +1,15 @@
+Test de réception des journaux : 20/11/2026
+
+[srv-web-01] Message émis à 07:53:09 UTC par scripts/health-check.sh
+(commande équivalente : logger -t healthcheck healthcheck-20261120075309)
+
+[srv-log-01] Recherche du message dans l'arborescence de réception :
+
+$ sudo grep -r healthcheck-20261120075309 /var/log/remote
+/var/log/remote/srv-web-01/system.log:2026-11-20T07:53:09+00:00 srv-web-01 healthcheck: healthcheck-20261120075309
+/var/log/remote/srv-web-01/system.log:2026-11-20T07:55:36+00:00 srv-web-01 sudo:    dokja : TTY=pts/0 ; PWD=/home/dokja ; USER=root ; COMMAND=/usr/bin/grep -r healthcheck-20261120075309 /var/log/remote
+
+Lecture :
+- Ligne 1 : le message de test, reçu à la seconde de son émission (07:53:09), sous le nom de la machine émettrice.
+- Ligne 2 : la même recherche, lancée par erreur sur srv-web-01, a elle aussi été journalisée puis transmise.
+  Elle confirme que le flux est continu, pas seulement le message de test.

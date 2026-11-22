@@ -1,0 +1,22 @@
+[srv-web-01] Effet du bit setgid sur le groupe des nouveaux fichiers, relevé le 21/11/2026
+
+Avant : dossier sans setgid
+$ ls -l /srv/
+drwxrwx--- 2 root webadmins 4096 nov.  21 18:20 web-partage
+
+fichier1 est créé par webuser (18:26), puis le setgid est posé (chmod g+s) :
+
+Après : dossier avec setgid (« s » à la place du « x » du groupe)
+$ sudo ls -l /srv/
+drwxrws--- 2 root webadmins 4096 nov.  21 18:33 web-partage
+
+fichier2 est créé par webuser (18:33) :
+
+$ sudo ls -l /srv/web-partage/
+-rw-rw-r-- 1 webuser webuser   0 nov.  21 18:26 fichier1
+-rw-rw-r-- 1 webuser webadmins 0 nov.  21 18:33 fichier2
+
+Lecture :
+- fichier1 (créé avant) garde le groupe privé de son créateur : un autre membre de webadmins ne pourrait pas le modifier par les droits de groupe.
+- fichier2 (créé après) prend le groupe du dossier, webadmins.
+- Le setgid ne change pas les fichiers déjà présents ; il agit à la création.
